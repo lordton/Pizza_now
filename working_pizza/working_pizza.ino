@@ -1,5 +1,5 @@
-const int buttonPin = 7;     // the number of the pushbutton pin
-const int ledPin =  13;      // the number of the LED pin
+const int buttonPin = 4;     // the number of the pushbutton pin
+const int ledPin =  12;      // the number of the LED pin
 int ledState = HIGH;         // the current state of the output pin
 int buttonState;             // the current reading from the input pin
 int lastButtonState = LOW; 
@@ -14,20 +14,31 @@ SoftwareSerial mySerial(2, 3); // RX, TX
 void setup() {
   pinMode(buttonPin, INPUT);
   pinMode(ledPin, OUTPUT);
+  pinMode(12, OUTPUT); 
+pinMode(13, OUTPUT);
+pinMode(10, OUTPUT);
+pinMode(11, OUTPUT);
 
   // set initial LED state
-  digitalWrite(ledPin, ledState);
-  
+
+ digitalWrite(10, HIGH); 
+delay(10000); // wait until gsm module boots up
   
   Serial.begin(19200);  //Скорость порта для связи Arduino с компьютером
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
   Serial.println("Goodnight moon!");
   mySerial.begin(19200);  //Скорость порта для связи Arduino с GSM модулем
   //mySerial.println("ATD+79037404216;");
-  mySerial.println("ATI");
+  //mySerial.println("ATI");
   mySerial.println("AT+CMGF=1");
+
+  digitalWrite(10, LOW); 
 }
 
 void loop() {
+
   // read the state of the switch into a local variable:
   int reading = digitalRead(buttonPin);
 
@@ -51,7 +62,20 @@ void loop() {
 
       // only toggle the LED if the new button state is HIGH
       if (buttonState == HIGH) {
-        ledState = !ledState;
+
+        
+            digitalWrite(12, HIGH);   // turn the LED on (HIGH is the voltage level)
+            digitalWrite(10, HIGH);   // turn the LED on (HIGH is the voltage level)
+          // wait for a second
+ // turn the LED off by making the voltage LOW
+
+   // wait for a second
+
+  
+        mySerial.println("ATI");
+        sms("little meow meow","89263637230");
+
+          digitalWrite(10, LOW);   
       }
     }
   }
@@ -82,3 +106,9 @@ void sms(String text, String phone) {
   Serial.println("SMS send finish");
   delay(3000);
 }
+
+
+  
+
+
+
